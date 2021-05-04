@@ -1,6 +1,6 @@
-export 'dart:html';
-
 import 'dart:convert';
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html' as html;
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -8,25 +8,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/src/widgets/toolbar_widget.dart';
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html;
 import 'package:html_editor_enhanced/utils/shims/dart_ui.dart' as ui;
+
+export 'dart:html';
 
 /// The HTML Editor widget itself, for web (uses IFrameElement)
 class HtmlEditorWidget extends StatefulWidget {
   HtmlEditorWidget({
-    Key? key,
-    required this.controller,
+    Key key,
+    @required this.controller,
     this.callbacks,
-    required this.plugins,
-    required this.htmlEditorOptions,
-    required this.htmlToolbarOptions,
-    required this.otherOptions,
-    required this.initBC,
+    @required this.plugins,
+    @required this.htmlEditorOptions,
+    @required this.htmlToolbarOptions,
+    @required this.otherOptions,
+    @required this.initBC,
   }) : super(key: key);
 
   final HtmlEditorController controller;
-  final Callbacks? callbacks;
+  final Callbacks callbacks;
   final List<Plugins> plugins;
   final HtmlEditorOptions htmlEditorOptions;
   final HtmlToolbarOptions htmlToolbarOptions;
@@ -43,15 +43,15 @@ class HtmlEditorWidget extends StatefulWidget {
 /// rebuilt excessively, hurting performance
 class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   /// The view ID for the IFrameElement. Must be unique.
-  late String createdViewId;
+  String createdViewId;
 
   /// The actual height of the editor, used to automatically set the height
-  late double actualHeight;
+  double actualHeight;
 
   /// A Future that is observed by the [FutureBuilder]. We don't use a function
   /// as the Future on the [FutureBuilder] because when the widget is rebuilt,
   /// the function may be excessively called, hurting performance.
-  Future<bool>? summernoteInit;
+  Future<bool> summernoteInit;
 
   /// Helps get the height of the toolbar to accurately adjust the height of
   /// the editor when the keyboard is visible.
@@ -94,14 +94,14 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                 data['type'].contains('toDart:') &&
                 data['view'] == createdViewId &&
                 data['type'].contains('onSelectMention')) {
-              p.onSelect!.call(data['value']);
+              p.onSelect.call(data['value']);
             }
           });
         }
       }
     }
     if (widget.callbacks != null) {
-      if (widget.callbacks!.onImageLinkInsert != null) {
+      if (widget.callbacks.onImageLinkInsert != null) {
         summernoteCallbacks = summernoteCallbacks +
             '''
           onImageLinkInsert: function(url) {
@@ -109,7 +109,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           },
         ''';
       }
-      if (widget.callbacks!.onImageUpload != null) {
+      if (widget.callbacks.onImageUpload != null) {
         summernoteCallbacks = summernoteCallbacks +
             """
           onImageUpload: function(files) {
@@ -142,7 +142,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           },
         """;
       }
-      if (widget.callbacks!.onImageUploadError != null) {
+      if (widget.callbacks.onImageUploadError != null) {
         summernoteCallbacks = summernoteCallbacks +
             """
               onImageUploadError: function(file, error) {
@@ -157,15 +157,14 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     }
     summernoteCallbacks = summernoteCallbacks + '}';
     var darkCSS = '';
-    if ((Theme.of(widget.initBC).brightness == Brightness.dark ||
-            widget.htmlEditorOptions.darkMode == true) &&
+    if ((Theme.of(widget.initBC).brightness == Brightness.dark || widget.htmlEditorOptions.darkMode == true) &&
         widget.htmlEditorOptions.darkMode != false) {
       darkCSS =
           '<link href=\"assets/packages/html_editor_enhanced/assets/summernote-lite-dark.css\" rel=\"stylesheet\">';
     }
     var jsCallbacks = '';
     if (widget.callbacks != null) {
-      jsCallbacks = getJsCallbacks(widget.callbacks!);
+      jsCallbacks = getJsCallbacks(widget.callbacks);
     }
     var summernoteScripts = """
       <script type="text/javascript">
@@ -391,23 +390,21 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         $jsCallbacks
       </script>
     """;
-    var filePath =
-        'packages/html_editor_enhanced/assets/summernote-no-plugins.html';
+    var filePath = 'packages/html_editor_enhanced/assets/summernote-no-plugins.html';
     if (widget.htmlEditorOptions.filePath != null) {
-      filePath = widget.htmlEditorOptions.filePath!;
+      filePath = widget.htmlEditorOptions.filePath;
     }
     var htmlString = await rootBundle.loadString(filePath);
     htmlString = htmlString
         .replaceFirst('<!--darkCSS-->', darkCSS)
         .replaceFirst('<!--headString-->', headString)
         .replaceFirst('<!--summernoteScripts-->', summernoteScripts)
-        .replaceFirst('jquery.min.js',
-            'assets/packages/html_editor_enhanced/assets/jquery.min.js')
-        .replaceFirst('summernote-lite.min.css',
-            'assets/packages/html_editor_enhanced/assets/summernote-lite.min.css')
-        .replaceFirst('summernote-lite.min.js',
-            'assets/packages/html_editor_enhanced/assets/summernote-lite.min.js');
-    if (widget.callbacks != null) addJSListener(widget.callbacks!);
+        .replaceFirst('jquery.min.js', 'assets/packages/html_editor_enhanced/assets/jquery.min.js')
+        .replaceFirst(
+            'summernote-lite.min.css', 'assets/packages/html_editor_enhanced/assets/summernote-lite.min.css')
+        .replaceFirst(
+            'summernote-lite.min.js', 'assets/packages/html_editor_enhanced/assets/summernote-lite.min.js');
+    if (widget.callbacks != null) addJSListener(widget.callbacks);
     final iframe = html.IFrameElement()
       ..width = MediaQuery.of(widget.initBC).size.width.toString() //'800'
       ..height = widget.htmlEditorOptions.autoAdjustHeight
@@ -417,11 +414,11 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
       ..srcdoc = htmlString
       ..style.border = 'none'
       ..onLoad.listen((event) async {
-        if (widget.callbacks != null && widget.callbacks!.onInit != null) {
-          widget.callbacks!.onInit!.call();
+        if (widget.callbacks != null && widget.callbacks.onInit != null) {
+          widget.callbacks.onInit.call();
         }
         if (widget.htmlEditorOptions.initialText != null) {
-          widget.controller.setText(widget.htmlEditorOptions.initialText!);
+          widget.controller.setText(widget.htmlEditorOptions.initialText);
         }
         var data = <String, Object>{'type': 'toIframe: getHeight'};
         data['view'] = createdViewId;
@@ -430,32 +427,25 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         html.window.postMessage(jsonStr, '*');
         html.window.onMessage.listen((event) {
           var data = json.decode(event.data);
-          if (data['type'] != null &&
-              data['type'].contains('toDart: onChange') &&
-              data['view'] == createdViewId) {
-            if (widget.callbacks != null &&
-                widget.callbacks!.onChange != null) {
-              widget.callbacks!.onChange!.call(data['contents']);
+          if (data['type'] != null && data['type'].contains('toDart: onChange') && data['view'] == createdViewId) {
+            if (widget.callbacks != null && widget.callbacks.onChange != null) {
+              widget.callbacks.onChange.call(data['contents']);
             }
-            if (widget.htmlEditorOptions.shouldEnsureVisible &&
-                Scrollable.of(context) != null) {
-              Scrollable.of(context)!.position.ensureVisible(
-                  context.findRenderObject()!,
-                  duration: const Duration(milliseconds: 100),
-                  curve: Curves.easeIn);
+            if (widget.htmlEditorOptions.shouldEnsureVisible && Scrollable.of(context) != null) {
+              Scrollable.of(context).position.ensureVisible(context.findRenderObject(),
+                  duration: const Duration(milliseconds: 100), curve: Curves.easeIn);
             }
           }
           if (data['type'] != null &&
               data['type'].contains('toDart: updateToolbar') &&
               data['view'] == createdViewId) {
             if (widget.controller.toolbar != null) {
-              widget.controller.toolbar!.updateToolbar(data);
+              widget.controller.toolbar.updateToolbar(data);
             }
           }
         });
       });
-    ui.platformViewRegistry
-        .registerViewFactory(createdViewId, (int viewId) => iframe);
+    ui.platformViewRegistry.registerViewFactory(createdViewId, (int viewId) => iframe);
     setState(() {
       summernoteInit = Future.value(true);
     });
@@ -464,17 +454,11 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: widget.htmlEditorOptions.autoAdjustHeight
-          ? actualHeight
-          : widget.otherOptions.height,
+      height: widget.htmlEditorOptions.autoAdjustHeight ? actualHeight : widget.otherOptions.height,
       child: Column(
         children: <Widget>[
-          widget.htmlToolbarOptions.toolbarPosition ==
-                  ToolbarPosition.aboveEditor
-              ? ToolbarWidget(
-                  key: toolbarKey,
-                  controller: widget.controller,
-                  options: widget.htmlToolbarOptions)
+          widget.htmlToolbarOptions.toolbarPosition == ToolbarPosition.aboveEditor
+              ? ToolbarWidget(key: toolbarKey, controller: widget.controller, options: widget.htmlToolbarOptions)
               : Container(height: 0, width: 0),
           Expanded(
               child: Directionality(
@@ -493,12 +477,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                                   : widget.otherOptions.height);
                         }
                       }))),
-          widget.htmlToolbarOptions.toolbarPosition ==
-                  ToolbarPosition.belowEditor
-              ? ToolbarWidget(
-                  key: toolbarKey,
-                  controller: widget.controller,
-                  options: widget.htmlToolbarOptions)
+          widget.htmlToolbarOptions.toolbarPosition == ToolbarPosition.belowEditor
+              ? ToolbarWidget(key: toolbarKey, controller: widget.controller, options: widget.htmlToolbarOptions)
               : Container(height: 0, width: 0),
         ],
       ),
@@ -619,45 +599,41 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   void addJSListener(Callbacks c) {
     html.window.onMessage.listen((event) {
       var data = json.decode(event.data);
-      if (data['type'] != null &&
-          data['type'].contains('toDart:') &&
-          data['view'] == createdViewId) {
-        if (data['type'].contains('htmlHeight') &&
-            widget.htmlEditorOptions.autoAdjustHeight) {
+      if (data['type'] != null && data['type'].contains('toDart:') && data['view'] == createdViewId) {
+        if (data['type'].contains('htmlHeight') && widget.htmlEditorOptions.autoAdjustHeight) {
           final docHeight = data['height'] ?? actualHeight;
           if ((docHeight != null && docHeight != actualHeight) && mounted) {
             setState(() {
-              actualHeight =
-                  docHeight + (toolbarKey.currentContext?.size?.height ?? 0);
+              actualHeight = docHeight + (toolbarKey.currentContext?.size?.height ?? 0);
             });
           }
         }
         if (data['type'].contains('onBeforeCommand')) {
-          c.onBeforeCommand!.call(data['contents']);
+          c.onBeforeCommand.call(data['contents']);
         }
         if (data['type'].contains('onChange')) {
-          c.onChange!.call(data['contents']);
+          c.onChange.call(data['contents']);
         }
         if (data['type'].contains('onChangeCodeview')) {
-          c.onChangeCodeview!.call(data['contents']);
+          c.onChangeCodeview.call(data['contents']);
         }
         if (data['type'].contains('onDialogShown')) {
-          c.onDialogShown!.call();
+          c.onDialogShown.call();
         }
         if (data['type'].contains('onEnter')) {
-          c.onEnter!.call();
+          c.onEnter.call();
         }
         if (data['type'].contains('onFocus')) {
-          c.onFocus!.call();
+          c.onFocus.call();
         }
         if (data['type'].contains('onBlur')) {
-          c.onBlur!.call();
+          c.onBlur.call();
         }
         if (data['type'].contains('onBlurCodeview')) {
-          c.onBlurCodeview!.call();
+          c.onBlurCodeview.call();
         }
         if (data['type'].contains('onImageLinkInsert')) {
-          c.onImageLinkInsert!.call(data['url']);
+          c.onImageLinkInsert.call(data['url']);
         }
         if (data['type'].contains('onImageUpload')) {
           var map = <String, dynamic>{
@@ -670,11 +646,11 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           };
           var jsonStr = json.encode(map);
           var file = fileUploadFromJson(jsonStr);
-          c.onImageUpload!.call(file);
+          c.onImageUpload.call(file);
         }
         if (data['type'].contains('onImageUploadError')) {
           if (data['base64'] != null) {
-            c.onImageUploadError!.call(
+            c.onImageUploadError.call(
                 null,
                 data['base64'],
                 data['error'].contains('base64')
@@ -692,7 +668,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             };
             var jsonStr = json.encode(map);
             var file = fileUploadFromJson(jsonStr);
-            c.onImageUploadError!.call(
+            c.onImageUploadError.call(
                 file,
                 null,
                 data['error'].contains('base64')
@@ -703,22 +679,22 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           }
         }
         if (data['type'].contains('onKeyDown')) {
-          c.onKeyDown!.call(data['keyCode']);
+          c.onKeyDown.call(data['keyCode']);
         }
         if (data['type'].contains('onKeyUp')) {
-          c.onKeyUp!.call(data['keyCode']);
+          c.onKeyUp.call(data['keyCode']);
         }
         if (data['type'].contains('onMouseDown')) {
-          c.onMouseDown!.call();
+          c.onMouseDown.call();
         }
         if (data['type'].contains('onMouseUp')) {
-          c.onMouseUp!.call();
+          c.onMouseUp.call();
         }
         if (data['type'].contains('onPaste')) {
-          c.onPaste!.call();
+          c.onPaste.call();
         }
         if (data['type'].contains('onScroll')) {
-          c.onScroll!.call();
+          c.onScroll.call();
         }
       }
     });

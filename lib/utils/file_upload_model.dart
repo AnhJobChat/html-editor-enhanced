@@ -26,22 +26,22 @@ class FileUpload {
   ///
   /// Note: This includes identifying data (e.g. data:image/jpeg;base64,) at the
   /// beginning. To strip this out, use FileUpload().base64.split(",")[1].
-  String? base64;
+  String base64;
 
   /// Last modified information in *milliseconds since epoch* format
-  DateTime? lastModified;
+  DateTime lastModified;
 
   /// Last modified information in *regular date* format
-  DateTime? lastModifiedDate;
+  DateTime lastModifiedDate;
 
   /// The filename
-  String? name;
+  String name;
 
   /// The file size in bytes
-  int? size;
+  int size;
 
   /// The content-type (eg. image/jpeg) of the file
-  String? type;
+  String type;
 
   /// Creates an instance of [FileUpload] from a JSON string
   factory FileUpload.fromJson(Map<String, dynamic> json) => FileUpload(

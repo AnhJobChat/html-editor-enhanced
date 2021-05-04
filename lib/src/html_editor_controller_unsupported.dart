@@ -11,7 +11,7 @@ class HtmlEditorController {
   });
 
   /// Toolbar widget state to call various methods. For internal use only.
-  ToolbarWidgetState? toolbar;
+  ToolbarWidgetState toolbar;
 
   /// Determines whether text processing should happen on input HTML, e.g.
   /// whether a new line should be converted to a <br>.
@@ -34,7 +34,7 @@ class HtmlEditorController {
 
   /// Allows the [InAppWebViewController] for the Html editor to be accessed
   /// outside of the package itself for endless control and customization.
-  InAppWebViewController? get editorController => null;
+  InAppWebViewController get editorController => null;
 
   /// Add a notification to the bottom of the editor. This is styled similar to
   /// Bootstrap alerts. You can set the HTML to be displayed in the alert,
@@ -56,7 +56,7 @@ class HtmlEditorController {
   void enable() {}
 
   /// A function to quickly call a document.execCommand function in a readable format
-  void execCommand(String command, {String? argument}) {}
+  void execCommand(String command, {String argument}) {}
 
   /// Gets the text from the editor and returns it as a [String].
   Future<String> getText() => Future.value('');

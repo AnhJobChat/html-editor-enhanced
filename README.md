@@ -242,8 +242,8 @@ Parameter | Type | Default | Description
 **linkInsertInterceptor** | `FutureOr<bool> Function(String, String, bool)` | `null` | Intercept any links inserted into the editor. The function passes the display text, the URL, and whether it opens a new tab.
 **mediaLinkInsertInterceptor** | `FutureOr<bool> Function(String, InsertFileType)` | `null` | Intercept any media links inserted into the editor. The function passes the URL and `InsertFileType` which indicates which file type was inserted
 **mediaUploadInterceptor** | `FutureOr<bool> Function(PlatformFile, InsertFileType)` | `null` | Intercept any media files inserted into the editor. The function passes `PlatformFile` which holds all relevant file data, and `InsertFileType` which indicates which file type was inserted.
-**onButtonPressed** | `FutureOr<bool> Function(ButtonType, bool?, void Function()?)` | `null` | Intercept any button presses. The function passes the enum for the pressed button, the current selected status of the button (if applicable) and a function to update the status (if applicable).
-**onDropdownChanged** | `FutureOr<bool> Function(DropdownType, dynamic, void Function(dynamic)?)` | `null` | Intercept any dropdown changes. The function passes the enum for the changed dropdown, the changed value, and a function to update the changed value (if applicable).
+**onButtonPressed** | `FutureOr<bool> Function(ButtonType, bool, void Function())` | `null` | Intercept any button presses. The function passes the enum for the pressed button, the current selected status of the button (if applicable) and a function to update the status (if applicable).
+**onDropdownChanged** | `FutureOr<bool> Function(DropdownType, dynamic, void Function(dynamic))` | `null` | Intercept any dropdown changes. The function passes the enum for the changed dropdown, the changed value, and a function to update the changed value (if applicable).
 **onOtherFileLinkInsert** | `Function(String)` | `null` | Intercept file link inserts other than image/audio/video. This handler is required when using the other file button, as the package has no built-in handlers
 **onOtherFileUpload** | `Function(PlatformFile)` | `null` | Intercept file uploads other than image/audio/video. This handler is required when using the other file button, as the package has no built-in handlers
 **otherFileExtensions** | `List<String>` | `null` | Allowed extensions when inserting files other than image/audio/video
@@ -607,8 +607,8 @@ These callbacks help you intercept any button presses or dropdown changes.
 
 Parameter | Type | Description
 ------------ | ------------- | -------------
-**onButtonPressed** | `FutureOr<bool> Function(ButtonType, bool?, void Function()?)` | Intercept any button presses. The function passes the enum for the pressed button, the current selected status of the button (if applicable) and a function to update the status (if applicable).
-**onDropdownChanged** | `FutureOr<bool> Function(DropdownType, dynamic, void Function(dynamic)?)` | Intercept any dropdown changes. The function passes the enum for the changed dropdown, the changed value, and a function to update the changed value (if applicable).
+**onButtonPressed** | `FutureOr<bool> Function(ButtonType, bool, void Function())` | Intercept any button presses. The function passes the enum for the pressed button, the current selected status of the button (if applicable) and a function to update the status (if applicable).
+**onDropdownChanged** | `FutureOr<bool> Function(DropdownType, dynamic, void Function(dynamic))` | Intercept any dropdown changes. The function passes the enum for the changed dropdown, the changed value, and a function to update the changed value (if applicable).
 
 You must return a `bool` to tell the plugin what it should do. When you return false, it assumes that you have handled the user request and taken action. When you return true, the plugin will use the default handlers to handle the user request.
 
@@ -735,12 +735,12 @@ import 'package:http/http.dart' as http;
   Widget editor = HtmlEditor(
     controller: controller,
     toolbarOptions: ToolbarOptions(
-      onButtonPressed: (ButtonType type, bool? status, Function()? updateStatus) {
+      onButtonPressed: (ButtonType type, bool status, Function() updateStatus) {
         print("button '${describeEnum(type)}' pressed, the current selected status is $status");
         //run a callback and return false and update the status, otherwise
         return true;
       },
-      onDropdownChanged: (DropdownType type, dynamic changed, Function(dynamic)? updateSelectedItem) {
+      onDropdownChanged: (DropdownType type, dynamic changed, Function(dynamic) updateSelectedItem) {
         print("dropdown '${describeEnum(type)}' changed to $changed");
         //run a callback and return false and update the changed value, otherwise
         return true;
@@ -825,7 +825,7 @@ class _ExampleState extends State<Example> {
           //these lines of code hide the keyboard and clear focus from the webview when any empty
           //space is clicked. These are very important for the shouldEnsureVisible to work as intended.
           SystemChannels.textInput.invokeMethod('TextInput.hide');
-          controller.editorController!.clearFocus();
+          controller.editorController.clearFocus();
         }
       },
       child: Scaffold(

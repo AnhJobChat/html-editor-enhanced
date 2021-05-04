@@ -7,13 +7,14 @@ import 'package:html_editor_enhanced/utils/plugins.dart';
 /// Fallback HtmlEditor class (should never be called)
 class HtmlEditor extends StatelessWidget {
   HtmlEditor({
-    Key? key,
-    required this.controller,
+    Key key,
+    @required this.controller,
     this.callbacks,
     this.htmlEditorOptions = const HtmlEditorOptions(),
     this.htmlToolbarOptions = const HtmlToolbarOptions(),
     this.otherOptions = const OtherOptions(),
     this.plugins = const [],
+    this.maxLength,
   }) : super(key: key);
 
   /// The controller that is passed to the widget, which allows multiple [HtmlEditor]
@@ -22,7 +23,7 @@ class HtmlEditor extends StatelessWidget {
 
   /// Sets & activates Summernote's callbacks. See the functions available in
   /// [Callbacks] for more details.
-  final Callbacks? callbacks;
+  final Callbacks callbacks;
 
   /// Defines options for the html editor
   final HtmlEditorOptions htmlEditorOptions;
@@ -35,6 +36,8 @@ class HtmlEditor extends StatelessWidget {
 
   /// Sets the list of Summernote plugins enabled in the editor.
   final List<Plugins> plugins;
+
+  final int maxLength;
 
   @override
   Widget build(BuildContext context) {

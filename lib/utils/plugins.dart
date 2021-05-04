@@ -19,17 +19,16 @@ abstract class Plugins {
 /// README available [here](https://github.com/team-loxo/summernote-at-mention)
 class SummernoteAtMention extends Plugins {
   /// Function used to get the displayed suggestions on mobile
-  final List<String> Function(String)? getSuggestionsMobile;
+  final List<String> Function(String) getSuggestionsMobile;
 
   /// List of mentions to display on Web. The default behavior is to only return
   /// the mentions containing the string entered by the user in the editor
-  final List<String>? mentionsWeb;
+  final List<String> mentionsWeb;
 
   /// Callback to run code when a mention is selected
-  final Function(String)? onSelect;
+  final Function(String) onSelect;
 
-  const SummernoteAtMention(
-      {this.getSuggestionsMobile, this.mentionsWeb, this.onSelect})
+  const SummernoteAtMention({this.getSuggestionsMobile, this.mentionsWeb, this.onSelect})
       : assert(kIsWeb ? mentionsWeb != null : getSuggestionsMobile != null);
 
   @override
@@ -44,9 +43,8 @@ class SummernoteAtMention extends Plugins {
 
   String getMentionsWeb() {
     var mentionsString = '[';
-    for (var e in mentionsWeb!) {
-      mentionsString =
-          mentionsString + "'$e'" + (e != mentionsWeb!.last ? ', ' : '');
+    for (var e in mentionsWeb) {
+      mentionsString = mentionsString + "'$e'" + (e != mentionsWeb.last ? ', ' : '');
     }
     return mentionsString + ']';
   }

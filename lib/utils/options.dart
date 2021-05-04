@@ -44,7 +44,7 @@ class HtmlEditorOptions {
   /// always light, `true` - always dark.
   ///
   /// The default value is null (switches with system).
-  final bool? darkMode;
+  final bool darkMode;
 
   /// Specify the file path to your custom html editor code.
   ///
@@ -53,25 +53,25 @@ class HtmlEditorOptions {
   /// If you plan to use this on Web, you must add comments in your HTML so the
   /// package can insert the relevant JS code to communicate between Dart and JS.
   /// See the README for more details on this.
-  final String? filePath;
+  final String filePath;
 
   /// Sets the Html editor's hint (text displayed when there is no text in the
   /// editor).
-  final String? hint;
+  final String hint;
 
   /// The initial text that is be supplied to the Html editor.
-  final String? initialText;
+  final String initialText;
 
   /// Customize the context menu for selected text on mobile
-  final ContextMenu? mobileContextMenu;
+  final ContextMenu mobileContextMenu;
 
   /// Set the duration until a long-press is recognized.
   ///
   /// The default value is 500ms.
-  final Duration? mobileLongPressDuration;
+  final Duration mobileLongPressDuration;
 
   /// Initial JS to inject into the editor.
-  final UnmodifiableListView<UserScript>? mobileInitialScripts;
+  final UnmodifiableListView<UserScript> mobileInitialScripts;
 
   /// Specifies whether the widget should scroll to reveal the HTML editor when
   /// it is focused or the text content is changed.
@@ -89,16 +89,7 @@ class HtmlToolbarOptions {
     this.audioExtensions,
     this.customToolbarButtons = const [],
     this.customToolbarInsertionIndices = const [],
-    this.defaultToolbarButtons = const [
-      StyleButtons(),
-      FontSettingButtons(),
-      FontButtons(),
-      ColorButtons(),
-      ListButtons(),
-      ParagraphButtons(),
-      InsertButtons(),
-      OtherButtons(),
-    ],
+    this.defaultToolbarButtons = const [],
     this.otherFileExtensions,
     this.imageExtensions,
     this.linkInsertInterceptor,
@@ -133,8 +124,7 @@ class HtmlToolbarOptions {
     this.buttonBorderWidth,
     this.renderBorder = false,
     this.textStyle,
-    this.separatorWidget =
-        const VerticalDivider(indent: 2, endIndent: 2, color: Colors.grey),
+    this.separatorWidget = const VerticalDivider(indent: 2, endIndent: 2, color: Colors.grey),
     this.renderSeparatorWidget = true,
     this.toolbarItemHeight = 36,
     this.gridViewHorizontalSpacing = 5,
@@ -144,7 +134,7 @@ class HtmlToolbarOptions {
   /// Allows you to set the allowed extensions when a user inserts an audio file
   ///
   /// By default any audio extension is allowed.
-  final List<String>? audioExtensions;
+  final List<String> audioExtensions;
 
   /// Allows you to create your own buttons that are added to the end of the
   /// default buttons list
@@ -169,7 +159,7 @@ class HtmlToolbarOptions {
   /// Allows you to set the allowed extensions when a user inserts an image
   ///
   /// By default any image extension is allowed.
-  final List<String>? imageExtensions;
+  final List<String> imageExtensions;
 
   /// Allows you to intercept any links being inserted into the editor. The
   /// function passes the display text, the URL itself, and whether the
@@ -180,7 +170,7 @@ class HtmlToolbarOptions {
   /// (true = continue with internal handler, false = do not use internal handler)
   ///
   /// If no interceptor is set, the plugin uses the internal handler.
-  final FutureOr<bool> Function(String, String, bool)? linkInsertInterceptor;
+  final FutureOr<bool> Function(String, String, bool) linkInsertInterceptor;
 
   /// Allows you to intercept any image/video/audio inserted as a link into the editor.
   /// The function passes the URL of the media inserted.
@@ -190,8 +180,7 @@ class HtmlToolbarOptions {
   /// (true = continue with internal handler, false = do not use internal handler)
   ///
   /// If no interceptor is set, the plugin uses the internal handler.
-  final FutureOr<bool> Function(String, InsertFileType)?
-      mediaLinkInsertInterceptor;
+  final FutureOr<bool> Function(String, InsertFileType) mediaLinkInsertInterceptor;
 
   /// Allows you to intercept any image/video/audio files being inserted into the editor.
   /// The function passes the PlatformFile class, which contains all the file data
@@ -202,8 +191,7 @@ class HtmlToolbarOptions {
   /// (true = continue with internal handler, false = do not use internal handler)
   ///
   /// If no interceptor is set, the plugin uses the internal handler.
-  final FutureOr<bool> Function(PlatformFile, InsertFileType)?
-      mediaUploadInterceptor;
+  final FutureOr<bool> Function(PlatformFile, InsertFileType) mediaUploadInterceptor;
 
   /// Allows you to intercept any button press. The function passes the ButtonType
   /// enum, which tells you which button was pressed, the current selected status of
@@ -218,8 +206,7 @@ class HtmlToolbarOptions {
   /// (true = continue with internal handler, false = do not use internal handler)
   ///
   /// If no interceptor is set, the plugin uses the internal handler.
-  final FutureOr<bool> Function(ButtonType, bool?, void Function()?)?
-      onButtonPressed;
+  final FutureOr<bool> Function(ButtonType, bool, void Function()) onButtonPressed;
 
   /// Allows you to intercept any dropdown changes. The function passes the
   /// DropdownType enum, which tells you which dropdown was changed,
@@ -233,8 +220,7 @@ class HtmlToolbarOptions {
   /// (true = continue with internal handler, false = do not use internal handler)
   ///
   /// If no interceptor is set, the plugin uses the internal handler.
-  final FutureOr<bool> Function(DropdownType, dynamic, void Function(dynamic)?)?
-      onDropdownChanged;
+  final FutureOr<bool> Function(DropdownType, dynamic, void Function(dynamic)) onDropdownChanged;
 
   /// Called when a link is inserted for a file using the "other file" button.
   ///
@@ -242,7 +228,7 @@ class HtmlToolbarOptions {
   /// provide this callback when using the button.
   ///
   /// The function passes the URL of the file inserted.
-  final Function(String)? onOtherFileLinkInsert;
+  final Function(String) onOtherFileLinkInsert;
 
   /// Called when a file is uploaded using the "other file" button.
   ///
@@ -251,13 +237,13 @@ class HtmlToolbarOptions {
   ///
   /// The function passes the PlatformFile class, which contains all the file data
   /// including name, size, type, Uint8List bytes, etc.
-  final Function(PlatformFile)? onOtherFileUpload;
+  final Function(PlatformFile) onOtherFileUpload;
 
   /// Allows you to set the allowed extensions when a user inserts a file other
   /// than image/audio/video
   ///
   /// By default any other extension is allowed.
-  final List<String>? otherFileExtensions;
+  final List<String> otherFileExtensions;
 
   /// Controls how the toolbar displays. See [ToolbarType] for more details.
   ///
@@ -272,7 +258,7 @@ class HtmlToolbarOptions {
   /// Allows you to set the allowed extensions when a user inserts a video.
   ///
   /// By default any video extension is allowed.
-  final List<String>? videoExtensions;
+  final List<String> videoExtensions;
 
   /// Styling options for the toolbar:
 
@@ -282,7 +268,7 @@ class HtmlToolbarOptions {
   final bool renderBorder;
 
   /// Sets the text style for all toolbar widgets
-  final TextStyle? textStyle;
+  final TextStyle textStyle;
 
   /// Sets the separator widget between toolbar sections. This widget is only
   /// used in [ToolbarType.nativeScrollable].
@@ -317,29 +303,29 @@ class HtmlToolbarOptions {
   /// (See the [DropdownButton] class for more information)
 
   final int dropdownElevation;
-  final Widget? dropdownIcon;
-  final Color? dropdownIconColor;
+  final Widget dropdownIcon;
+  final Color dropdownIconColor;
   final double dropdownIconSize;
   final double dropdownItemHeight;
-  final Color? dropdownFocusColor;
-  final Color? dropdownBackgroundColor;
-  final double? dropdownMenuMaxHeight;
-  final BoxDecoration? dropdownBoxDecoration;
+  final Color dropdownFocusColor;
+  final Color dropdownBackgroundColor;
+  final double dropdownMenuMaxHeight;
+  final BoxDecoration dropdownBoxDecoration;
 
   /// Styling options that only apply to the buttons:
   /// (See the [ToggleButtons] class for more information)
 
-  final Color? buttonColor;
-  final Color? buttonSelectedColor;
-  final Color? buttonFillColor;
-  final Color? buttonFocusColor;
-  final Color? buttonHighlightColor;
-  final Color? buttonHoverColor;
-  final Color? buttonSplashColor;
-  final Color? buttonBorderColor;
-  final Color? buttonSelectedBorderColor;
-  final BorderRadius? buttonBorderRadius;
-  final double? buttonBorderWidth;
+  final Color buttonColor;
+  final Color buttonSelectedColor;
+  final Color buttonFillColor;
+  final Color buttonFocusColor;
+  final Color buttonHighlightColor;
+  final Color buttonHoverColor;
+  final Color buttonSplashColor;
+  final Color buttonBorderColor;
+  final Color buttonSelectedBorderColor;
+  final BorderRadius buttonBorderRadius;
+  final double buttonBorderWidth;
 }
 
 /// Other options such as the height of the widget and the decoration surrounding it
@@ -347,8 +333,7 @@ class OtherOptions {
   const OtherOptions({
     this.decoration = const BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(4)),
-      border:
-          Border.fromBorderSide(BorderSide(color: Color(0xffececec), width: 1)),
+      border: Border.fromBorderSide(BorderSide(color: Color(0xffececec), width: 1)),
     ),
     this.height = 400,
   });

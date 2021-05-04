@@ -30,22 +30,53 @@ class FontSettingButtons extends Toolbar {
 /// Font group
 class FontButtons extends Toolbar {
   final bool bold;
+  final Widget boldIcon;
   final bool italic;
+  final Widget italicIcon;
   final bool underline;
+  final Widget underlineIcon;
   final bool clearAll;
+  final Widget clearAllIcon;
   final bool strikethrough;
+  final Widget strikethroughIcon;
   final bool superscript;
+  final Widget superscriptIcon;
   final bool subscript;
+  final Widget subscriptIcon;
 
   const FontButtons({
     this.bold = true,
+    this.boldIcon,
     this.italic = true,
+    this.italicIcon,
     this.underline = true,
+    this.underlineIcon,
     this.clearAll = true,
+    this.clearAllIcon,
     this.strikethrough = true,
+    this.strikethroughIcon,
     this.superscript = true,
+    this.superscriptIcon,
     this.subscript = true,
+    this.subscriptIcon,
   });
+
+  List<Widget> getIconDisplay1() {
+    var icons = <Widget>[];
+    if (bold) icons.add(boldIcon ?? Icon(Icons.format_bold));
+    if (italic) icons.add(italicIcon ?? Icon(Icons.format_italic));
+    if (underline) icons.add(underlineIcon ?? Icon(Icons.format_underline));
+    if (clearAll) icons.add(clearAllIcon ?? Icon(Icons.format_clear));
+    return icons;
+  }
+
+  List<Widget> getIconDisplay2() {
+    var icons = <Widget>[];
+    if (strikethrough) icons.add(strikethroughIcon ?? Icon(Icons.format_strikethrough));
+    if (superscript) icons.add(superscriptIcon ?? Icon(Icons.superscript));
+    if (subscript) icons.add(subscriptIcon ?? Icon(Icons.subscript));
+    return icons;
+  }
 
   List<Icon> getIcons1() {
     var icons = <Icon>[];
@@ -86,14 +117,25 @@ class ColorButtons extends Toolbar {
 /// List group
 class ListButtons extends Toolbar {
   final bool ul;
+  final Widget bulletIcon;
   final bool ol;
+  final Widget numberedIcon;
   final bool listStyles;
 
   const ListButtons({
     this.ul = true,
+    this.bulletIcon,
     this.ol = true,
+    this.numberedIcon,
     this.listStyles = true,
   });
+
+  List<Widget> getIconDisplay() {
+    var icons = <Widget>[];
+    if (ul) icons.add(bulletIcon ?? Icon(Icons.format_list_bulleted));
+    if (ol) icons.add(numberedIcon ?? Icon(Icons.format_list_numbered));
+    return icons;
+  }
 
   List<Icon> getIcons() {
     var icons = <Icon>[];
